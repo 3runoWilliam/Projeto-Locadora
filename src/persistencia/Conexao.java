@@ -9,7 +9,7 @@ public class Conexao {
 	private Connection connection;
 
 	public Conexao(String u, String s, String c) {
-		path = "jdbc:postgresql://local:5432/locadora";
+		path = "jdbc:postgresql://localhost:5432/locadora";
 		user = "postgres";
 		passoword = "postgres";
 	}
@@ -18,9 +18,7 @@ public class Conexao {
 		try {
 			
 			Class.forName("org.postgresql.Driver");
-			System.out.println("passou forname");
 			connection = DriverManager.getConnection(path, user, passoword);
-			System.out.println("passou connection");
 			
 		}catch(Exception e) {
 			System.out.println("--- ERRO PARA CONECTAR --- " + e.getMessage());
