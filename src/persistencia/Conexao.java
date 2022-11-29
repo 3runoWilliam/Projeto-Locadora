@@ -8,7 +8,7 @@ public class Conexao {
 	private String path;
 	private Connection connection;
 
-	public Conexao(String u, String s, String c) {
+	public Conexao() {
 		path = "jdbc:postgresql://localhost:5432/locadora";
 		user = "postgres";
 		passoword = "postgres";

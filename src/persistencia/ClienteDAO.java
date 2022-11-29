@@ -11,9 +11,10 @@ public class ClienteDAO {
 	private String mostrar = "SELECT * FROM Cliente";
 	private String alterar = "UPDATE Cliente SET name = ?, idade = ?, telefone = ?, endereco = ? WHERE id = ?";
 	private String inserir = "INSERT INTO Cliente(name, idade, telefone, endereco) VALUES (?, ?, ?, ?)";
+	private String deletar = "DELETE FROM Cliente WHERE id = ?";
 	
 	public ClienteDAO() {
-		c = new Conexao("jdbc:postgresql://localhost:5432/locadora","postgres","postgres");
+		c = new Conexao();
 	}
 	
 	public ArrayList<Cliente> mostrarClientes() {
@@ -36,7 +37,6 @@ public class ClienteDAO {
 	}
 	
 	public void alterarCliente(Cliente dale) {
-		
 		try {
 			c.conectar();
 			PreparedStatement mudar = c.getConnection().prepareStatement(alterar);
@@ -55,7 +55,6 @@ public class ClienteDAO {
 	}
 	
 	public void inserirCliente(Cliente dale) {
-		
 		try {
 			c.conectar();
 			PreparedStatement adicionar = c.getConnection().prepareStatement(inserir);
@@ -71,4 +70,16 @@ public class ClienteDAO {
 		}
 	}
 	
+	public void deletarCliente(int id) {
+		try {
+			c.conectar();
+			PreparedStatement excluir = c.getConnection().prepareStatement(deletar);
+			excluir.setInt(1, id);
+			
+			excluir.execute();
+			c.desconectar();
+		}catch(Exception e) {
+			System.out.println("--- ERRO EM INSERIR ---" + e.getMessage());
+		}
+	}
 }
