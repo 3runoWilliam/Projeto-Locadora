@@ -11,9 +11,12 @@ public class Main {
 		
 		int opc = -1, opc2 = -1;
 		ClienteDAO cdao = new ClienteDAO();
-		Conexao conexao = new Conexao();
+		AluguelDAO adao = new AluguelDAO();
+		FilmeDAO fdao = new FilmeDAO();
 		Scanner entrada = new Scanner(System.in);
 		ArrayList<Cliente> listaNova = cdao.mostrarClientes();
+		ArrayList<Aluguel> listaAluguel = adao.mostrarAlugueis();
+		ArrayList<Filme> listaFilmes = fdao.mostrarFilmes();
 
 		do {
 			System.out.println("Menu Principal\r\n"
@@ -98,21 +101,71 @@ public class Main {
 				break;
 			case 4:
 				
+				//mostrar os alugueis e os prazos do cliente pelo ID
+				
+				System.out.println("DIGITE SEU *ID* PARA LOCALIZARMOS SEUS ALUGUEIS PENDENTES: ");
+				int aux2 = entrada.nextInt();
+				
+				for(int i=0; i < listaNova.size(); i++) {
+					if(aux2 == listaNova.get(i).getId()) {
+						for(i=0; i < listaAluguel.size(); i++) {
+							System.out.println(""+listaAluguel.get(i).getData_aluguel()+"\t"+listaAluguel.get(i).getData_entrega()+"\t"+listaAluguel.get(i).getValor_aluguel());		
+						}
+					}
+				}
+				
 				break;
 			case 5:
 				
 				break;
 			case 6:				
+				System.out.println("DIGITE SEU *ID* PARA INICIARMOS UM ALUGUEL : ");
+				aux2 = entrada.nextInt();
+				
+				for(int i=0; i < listaNova.size(); i++) {
+					if(aux2 == listaNova.get(i).getId()) {
+						System.out.println("OLÁ, " + listaNova.get(i).getName());
+						System.out.println("\n");
+						
+						
+						for(i=0; i < listaFilmes.size(); i++) {
+							System.out.println(""+ listaFilmes.get(i).getId_Filme() + "\t" + listaFilmes.get(i).getCategoria() + "\t" + listaFilmes.get(i).getTitulo());		
+						}
+						System.out.println("\nDIGITE O *ID* DO FILME QUE VOCÊ DESEJA ALUGAR: ");
+						aux2 = entrada.nextInt();
+						
+						for(i=0; i < listaFilmes.size(); i++) {
+							if(aux2 == listaFilmes.get(i).getId_Filme()) {
+								System.out.println("VOCÊ ALUGOU: " + listaFilmes.get(i).getTitulo());
+								
+								
+							}
+						}
+						//lista dos filmes cadastrados -- Select * FROM Filme
+					}
+				}
 				
 				break;
 			case 7:
+				
 				break;
 			case 8:
-				for(int i=0; i < listaNova.size(); i++) {
-					System.out.println(""+listaNova.get(i).getId()+"\t"+listaNova.get(i).getName()+"\t"+listaNova.get(i).getIdade()+"\t"+
-							listaNova.get(i).getTelefone()+"\t"+listaNova.get(i).getEndereco());		
+				//CADASTRAR FILMES
+				
+				Filme f = new Filme();
+				
+				for(int i=0; i < listaFilmes.size(); i++) {
+					System.out.println(""+ listaFilmes.get(i).getId_Filme() + "\t" + listaFilmes.get(i).getCategoria() + "\t" + listaFilmes.get(i).getTitulo());		
 				}
-	
+				
+				
+				System.out.println("\nDIGITE A CATEGORIA DO FILME : \n");
+				entrada.nextLine();
+				f.setCategoria(entrada.nextLine());
+				System.out.println("DIGITE O TITULO DO FILME: \n");
+				f.setTitulo(entrada.nextLine());
+				
+				fdao.inserirFilme(f);				
 				break;
 			}
 		}while(opc != 0);

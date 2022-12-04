@@ -6,6 +6,7 @@ public class Aluguel {
 	private String Data_aluguel;
 	private String Data_entrega; 
 	private int valor_aluguel;
+	//quando um cliente alugar um filme, este filme terá prazo e valor (dependendo se for lançamento ou não)
 	
 	public Aluguel() {
 		
