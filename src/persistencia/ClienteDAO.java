@@ -1,5 +1,6 @@
 package persistencia;
 
+import dominio.Aluguel;
 import dominio.Cliente;
 
 import java.util.*;
@@ -12,6 +13,9 @@ public class ClienteDAO {
 	private String alterar = "UPDATE Cliente SET name = ?, idade = ?, telefone = ?, endereco = ? WHERE id = ?";
 	private String inserir = "INSERT INTO Cliente(name, idade, telefone, endereco) VALUES (?, ?, ?, ?)";
 	private String deletar = "DELETE FROM Cliente WHERE id = ?";
+	private String mostrarTudo = "SELECT data_aluguel, data_entrega, valor_aluguel, fk_filme FROM cliente,aluguel WHERE id = fk_cliente AND id = ?";
+	
+
 	
 	public ClienteDAO() {
 		c = new Conexao();
@@ -28,6 +32,27 @@ public class ClienteDAO {
 			while(rs.next()) {
 				pessoa = new Cliente(rs.getInt("id"), rs.getString("name"), rs.getInt("idade"), rs.getString("telefone"), rs.getString("endereco"));
 				lista.add(pessoa);
+			}
+			c.desconectar();
+		}catch(Exception e){
+			System.out.println("--- ERRO NO RELATORIO ---" + e.getMessage());			
+		}
+		return lista;
+	}
+	
+	public ArrayList<Aluguel> mostrarTudinho(int id) {
+		Aluguel aluguel;
+		ArrayList<Aluguel> lista = new ArrayList<>();
+		try {
+			c.conectar();
+			PreparedStatement apresentar = c.getConnection().prepareStatement(mostrarTudo);
+			apresentar.setInt(1, id);
+			apresentar.execute();
+			ResultSet rs = apresentar.executeQuery();
+			
+			while(rs.next()) {
+				aluguel = new Aluguel(rs.getString("data_aluguel"), rs.getString("data_entrega"), rs.getInt("valor_aluguel"), rs.getInt("fk_filme"));
+				lista.add(aluguel);
 			}
 			c.desconectar();
 		}catch(Exception e){

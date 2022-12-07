@@ -10,9 +10,13 @@ public class Cliente {
 	public Cliente() {
 		
 	}
+	
+	public Cliente(String name, String telefone) {
+		this.name = name;
+		this.telefone = telefone;
+	}
 
 	public Cliente(int id, String name, int idade, String telefone, String endereco) {
-		
 		this.id = id;
 		this.name = name;
 		this.idade = idade;
