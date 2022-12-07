@@ -12,6 +12,7 @@ public class AluguelDAO {
 	private String mostrar = "SELECT * FROM aluguel";
 	private String mostrarCertinho = "SELECT * FROM cliente,aluguel WHERE id = fk_cliente AND id = ?";
 	private String adicionarFilmeAoCliente = "INSERT INTO Aluguel(fk_cliente, fk_filme, data_aluguel, data_entrega, valor_aluguel) VALUES (?, ?, ?, ?, ?)";
+	//private String deletarFK = "DELETE FROM aluguel WHERE fk_cliente = ?";
 	
 	
 	public AluguelDAO() {
@@ -80,4 +81,18 @@ public class AluguelDAO {
 			System.out.println("--- ERRO AO ADICIONAR O FILME PARA O CLIENTE ---" + e.getMessage());
 		}
 	}
+	
+	/*public void deletarFKCliente(int id) {
+		try {
+			c.conectar();
+			PreparedStatement excluir = c.getConnection().prepareStatement(deletarFK);
+			excluir.setInt(1, id);
+			
+			excluir.execute();
+			c.desconectar();
+		}catch(Exception e) {
+			System.out.println("--- ERRO EM DELETAR CLIENTE ---" + e.getMessage());
+		}
+	}
+	*/
 }

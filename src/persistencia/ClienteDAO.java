@@ -14,8 +14,7 @@ public class ClienteDAO {
 	private String inserir = "INSERT INTO Cliente(name, idade, telefone, endereco) VALUES (?, ?, ?, ?)";
 	private String deletar = "DELETE FROM Cliente WHERE id = ?";
 	private String mostrarTudo = "SELECT data_aluguel, data_entrega, valor_aluguel, fk_filme FROM cliente,aluguel WHERE id = fk_cliente AND id = ?";
-	
-
+	private String deletarFK = "DELETE FROM aluguel WHERE fk_cliente = ?";
 	
 	public ClienteDAO() {
 		c = new Conexao();
@@ -56,7 +55,7 @@ public class ClienteDAO {
 			}
 			c.desconectar();
 		}catch(Exception e){
-			System.out.println("--- ERRO NO RELATORIO ---" + e.getMessage());			
+			System.out.println("--- ERRO NO RELATORIO DO CLIENTE ---" + e.getMessage());			
 		}
 		return lista;
 	}
@@ -75,7 +74,7 @@ public class ClienteDAO {
 			c.desconectar();
 			
 		}catch(Exception e) {
-			System.out.println("--- ERRO PARA ALTERAR ---");
+			System.out.println("--- ERRO PARA ALTERAR CLIENTE ---");
 		}
 	}
 	
@@ -91,20 +90,23 @@ public class ClienteDAO {
 			adicionar.execute();
 			c.desconectar();
 		}catch(Exception e) {
-			System.out.println("--- ERRO EM INSERIR ---" + e.getMessage());
+			System.out.println("--- ERRO EM INSERIR CLIENTE ---" + e.getMessage());
 		}
 	}
 	
 	public void deletarCliente(int id) {
 		try {
 			c.conectar();
+			PreparedStatement excluirFk = c.getConnection().prepareStatement(deletarFK);
 			PreparedStatement excluir = c.getConnection().prepareStatement(deletar);
+			excluirFk.setInt(1, id);
 			excluir.setInt(1, id);
 			
+			excluirFk.execute();
 			excluir.execute();
 			c.desconectar();
 		}catch(Exception e) {
-			System.out.println("--- ERRO EM INSERIR ---" + e.getMessage());
+			System.out.println("--- ERRO EM DELETAR CLIENTE ---" + e.getMessage());
 		}
 	}
 }
