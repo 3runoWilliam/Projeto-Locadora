@@ -1,6 +1,7 @@
 package persistencia;
 
 import dominio.Cliente;
+import dominio.Filme;
 import dominio.Aluguel;
 
 import java.util.*;
@@ -11,10 +12,9 @@ public class AluguelDAO {
 	private Conexao c;
 	private String mostrar = "SELECT * FROM aluguel";
 	private String mostrarCertinho = "SELECT * FROM cliente,aluguel WHERE id = fk_cliente AND id = ?";
+	private String mostrarFilme = "SELECT id_filme, categoria, título, filme.valor_aluguel FROM cliente,aluguel, filme WHERE cliente.id = fk_cliente AND id_filme = fk_filme AND cliente.id = ?";
 	private String adicionarFilmeAoCliente = "INSERT INTO Aluguel(fk_cliente, fk_filme, data_aluguel, data_entrega, valor_aluguel) VALUES (?, ?, ?, ?, ?)";
-	//private String deletarFK = "DELETE FROM aluguel WHERE fk_cliente = ?";
-	
-	
+		
 	public AluguelDAO() {
 		c = new Conexao();
 	}
@@ -28,22 +28,20 @@ public class AluguelDAO {
 			ResultSet rs = apresentar.executeQuery(mostrar);
 			
 			while(rs.next()) {
-				aluguel = new Aluguel(rs.getString("data_aluguel"), rs.getString("data_entrega"), rs.getInt("valor_aluguel"), rs.getInt("fk_filme"));
+				aluguel = new Aluguel(rs.getString("Data_aluguel"), rs.getString("Data_entrega"), rs.getInt("valor_aluguel"), rs.getInt("fk_filme"), rs.getInt("fk_cliente"));
 				lista.add(aluguel);
 			}
 			c.desconectar();
 		}catch(Exception e){
 			System.out.println("--- ERRO NO RELATORIO MOSTRAR ALUGUEIS ---" + e.getMessage());			
 		}
-		return null;
+		return lista;
 	}
 	
 	public ArrayList<Aluguel> mostrarAlugueisCertinho(Cliente id) {
-		//Cliente cliente;
 		Aluguel aluguel;
 		
 		ArrayList<Aluguel> lista = new ArrayList<Aluguel>();
-		//ArrayList<Cliente> listaCliente = new ArrayList<Cliente>();
 		try {
 			c.conectar();
 			PreparedStatement apresentar = c.getConnection().prepareStatement(mostrarCertinho);
@@ -51,11 +49,8 @@ public class AluguelDAO {
 			
 			apresentar.setInt(1, id.getId());
 			
-			while(rs.next()) {
-				/*cliente = new Cliente(rs.getString("name"), rs.getString("telefone"));
-				listaCliente.add(cliente);*/
-				
-				aluguel = new Aluguel(rs.getString("Data_aluguel"), rs.getString("Data_entrega"), rs.getInt("valor_aluguel"), rs.getInt("fk_filme"));
+			while(rs.next()) {				
+				aluguel = new Aluguel(rs.getString("Data_aluguel"), rs.getString("Data_entrega"), rs.getInt("valor_aluguel"), rs.getInt("fk_filme"), rs.getInt("fk_cliente"));
 				lista.add(aluguel);
 			}
 			c.desconectar();
@@ -82,17 +77,24 @@ public class AluguelDAO {
 		}
 	}
 	
-	/*public void deletarFKCliente(int id) {
+	public ArrayList<Filme> mostrarFilmes(int id) {
+		Filme Filme;
+		ArrayList<Filme> listaFilme = new ArrayList<>();
 		try {
 			c.conectar();
-			PreparedStatement excluir = c.getConnection().prepareStatement(deletarFK);
-			excluir.setInt(1, id);
+			PreparedStatement apresentar = c.getConnection().prepareStatement(mostrarFilme);
+			apresentar.setInt(1, id);
 			
-			excluir.execute();
+			ResultSet rs = apresentar.executeQuery();
+			
+			while(rs.next()) {
+				Filme = new Filme(rs.getInt("id_Filme"), rs.getString("categoria"), rs.getString("título"), rs.getInt("valor_aluguel"));
+				listaFilme.add(Filme);
+			}
 			c.desconectar();
-		}catch(Exception e) {
-			System.out.println("--- ERRO EM DELETAR CLIENTE ---" + e.getMessage());
+		}catch(Exception e){
+			System.out.println("--- ERRO NO RELATORIO MOSTRAR ALUGUEIS ---" + e.getMessage());			
 		}
+		return listaFilme;
 	}
-	*/
 }

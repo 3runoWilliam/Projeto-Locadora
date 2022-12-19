@@ -9,15 +9,14 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		int opc = -1, opc2 = -1;
 		ClienteDAO cdao = new ClienteDAO();
 		AluguelDAO adao = new AluguelDAO();
 		FilmeDAO fdao = new FilmeDAO();
 		Filme f = new Filme();
 		Scanner entrada = new Scanner(System.in);
-		ArrayList<Cliente> listaNova = cdao.mostrarClientes();
-		ArrayList<Aluguel> listaAluguel = adao.mostrarAlugueis();
+		ArrayList<Cliente> listaCliente = cdao.mostrarClientes();
 		ArrayList<Filme> listaFilmes = fdao.mostrarFilmes();
+		int opc = -1, opc2 = -1;
 
 		do {
 			System.out.println("\nMenu Principal\r\n"
@@ -28,11 +27,10 @@ public class Main {
 					+ "4 – Ver meus aluguéis e prazos\r\n"
 					+ "5 – Valores dos filmes\r\n"
 					+ "6 - Alugar Filme\r\n"
-					+ "7 – Ver filmes disponíveis\r\n"
-					+ "8 – Portal do dono\r\n"
+					+ "7 – Portal do dono\r\n"
 					+ "0 – Sair do Sistema \r\n"
-					+ "");
-			
+					+ "--------------------------\r\n");
+						
 			opc = entrada.nextInt();
 			
 			switch(opc) {
@@ -50,7 +48,6 @@ public class Main {
 				c.setEndereco(entrada.nextLine());
 				
 				cdao.inserirCliente(c);
-				
 				break;
 			case 2:
 				System.out.println("DIGITE O SEU ID: ");
@@ -62,8 +59,8 @@ public class Main {
 				System.out.println("\nDE QUEM VOCÊ DESEJA ALTERAR? (DIGITE O ID) ");
 				
 				int aux = entrada.nextInt();
-				for(int i=0; i < listaNova.size(); i++) {
-					if(aux == listaNova.get(i).getId()) {
+				for(int i=0; i < listaCliente.size(); i++) {
+					if(aux == listaCliente.get(i).getId()) {
 						System.out.println("O QUE VOCÊ DESEJA MUDAR? \n" +
 								"1- NOME COMPLETO\n" +
 								"2- IDADE\n" +
@@ -74,64 +71,70 @@ public class Main {
 						if(opc2 == 1) {
 							System.out.println("\nDIGITE O NOME ");
 							entrada.nextLine();
-							listaNova.get(i).setName(entrada.nextLine());
+							listaCliente.get(i).setName(entrada.nextLine());
 						}if(opc2 == 2) {
 							System.out.println("\nDIGITE O IDADE: ");
-							listaNova.get(i).setIdade(entrada.nextInt());
+							listaCliente.get(i).setIdade(entrada.nextInt());
 						}if(opc2 == 3) {
 							System.out.println("\nDIGITE O TELEFONE: ");
 							entrada.nextLine();
-							listaNova.get(i).setTelefone(entrada.nextLine());
+							listaCliente.get(i).setTelefone(entrada.nextLine());
 						}if(opc2 == 4) {
 							System.out.println("\nDIGITE O ENDERECO: ");
 							entrada.nextLine();
-							listaNova.get(i).setEndereco(entrada.nextLine());									
+							listaCliente.get(i).setEndereco(entrada.nextLine());									
 						}
-						cdao.alterarCliente(listaNova.get(i));
+						cdao.alterarCliente(listaCliente.get(i));
 					}
 				}
 				break;
 			case 4:
-				//mostrar os alugueis e os prazos do cliente pelo ID
-				ArrayList<Aluguel> lista1 = new ArrayList<>();
 				
 				System.out.println("DIGITE SEU *ID* PARA LOCALIZARMOS SEUS ALUGUEIS PENDENTES: ");
-				int aux2 = entrada.nextInt();
-				lista1 = cdao.mostrarTudinho(aux2);
+				int id1 = entrada.nextInt();
+				entrada.nextLine();
 				
-				for(int i=0; i < lista1.size(); i++) {
-						System.out.println("\n"+ lista1.get(i).getData_aluguel() + "\t" + lista1.get(i).getData_entrega() + "\tR$ " + lista1.get(i).getValor_aluguel() + "\tFILME: " + lista1.get(i).getFk_filme() + "\n");		
+				for(int i=0; i < listaCliente.size(); i++) {
+					if(id1 == listaCliente.get(i).getId()) {
+						System.out.println("OLÁ, " + listaCliente.get(i).getName() + " SEUS ALUGUEIS PENDENTES SÃO: ");
+					}
 				}
+				Aluguel a = new Aluguel();
+				ArrayList<Filme> listaFilmes1 = new ArrayList<>();
+				listaFilmes1 = a.relatorioFilme(id1);
 				
+				for(int i=0; i<listaFilmes1.size();i++){
+					System.out.println("\n" + listaFilmes.get(i).getId_Filme() + "	|	" + listaFilmes.get(i).getCategoria() + "	|	" + listaFilmes.get(i).getTitulo() + "	|	R$" + listaFilmes.get(i).getValor_aluguel());
+				}
 				break;
 				
 			case 5:
 				for(int i=0; i < listaFilmes.size(); i++) {
-					System.out.println("\n" + listaFilmes.get(i).getId_Filme() + "\t" + listaFilmes.get(i).getCategoria() + "\t" + listaFilmes.get(i).getTitulo() + "\tR$" + listaFilmes.get(i).getValor_aluguel());		
+					System.out.println("\n" + listaFilmes.get(i).getId_Filme() + "	|	" + listaFilmes.get(i).getCategoria() + "	|	" + listaFilmes.get(i).getTitulo() + "	|	R$" + listaFilmes.get(i).getValor_aluguel());		
 				}
 				break;
 				
-			case 6:				
-				Aluguel a = new Aluguel();
+			case 6:		
+				a = new Aluguel();
+				int aux2;
 				
 				System.out.println("DIGITE SEU *ID* PARA INICIARMOS UM ALUGUEL : ");
 				aux2 = entrada.nextInt();
 				a.setFk_cliente(aux2);
 				
-				for(int i=0; i < listaNova.size(); i++) {
-					if(aux2 == listaNova.get(i).getId()) {
-						System.out.println("OLÁ, " + listaNova.get(i).getName());
+				for(int i=0; i < listaCliente.size(); i++) {
+					if(aux2 == listaCliente.get(i).getId()) {
+						System.out.println("OLÁ, " + listaCliente.get(i).getName());
 						System.out.println("\n");
 						
-						//DIGITE ATÉ QUANDO VC QUER ALUGAR O FILME E PARA QUANDO QUER
 						for(i=0; i < listaFilmes.size(); i++) {
-							System.out.println(""+ listaFilmes.get(i).getId_Filme() + "\t" + listaFilmes.get(i).getCategoria() + "\t" + listaFilmes.get(i).getTitulo() + "\t" + listaFilmes.get(i).getValor_aluguel());		
+							System.out.println(""+ listaFilmes.get(i).getId_Filme() + "	|	" + listaFilmes.get(i).getCategoria() + "	|	" + listaFilmes.get(i).getTitulo() + "	|	" + listaFilmes.get(i).getValor_aluguel());		
 						}
 						
 						System.out.println("\nDIGITE O *ID* DO FILME QUE VOCÊ DESEJA ALUGAR: ");
 						aux2 = entrada.nextInt();
 						a.setFk_filme(aux2);
-						
+
 						for(i=0; i < listaFilmes.size(); i++) {
 							if(aux2 == listaFilmes.get(i).getId_Filme()) {
 								System.out.println("VOCÊ ALUGOU: " + listaFilmes.get(i).getTitulo());;
@@ -147,73 +150,94 @@ public class Main {
 								adao.adicionarAluguel(a);
 							}
 						}
-						//lista dos filmes cadastrados -- Select * FROM Filme
 					}
 				}
 				break;
 			case 7:
-				// colocar uma bolean em filmes para saber se esta alugado ou não
-				break;
-			case 8:
-				for(int i=0; i < listaFilmes.size(); i++) {
-					System.out.println(""+ listaFilmes.get(i).getId_Filme() + "\t" + listaFilmes.get(i).getCategoria() + "\t" + listaFilmes.get(i).getTitulo() + "\tR$ " + listaFilmes.get(i).getValor_aluguel());		
-				}
-
-				// FAZER MENU PARA ESCOLHER ENTRE - CADASTRAR FILME - DELETAR FILME - ALTERAR FILME
-				System.out.println("\nO QUE VOCÊ DESEJA FAZER? \n" +
-						"1- ADICIONAR UM FILME\n" +
-						"2- ALTERAR UM FILME\n" +
-						"3- DELETAR UM FILME\n" +
-						"4- VÊ CADASTROS\n");
-				aux2 = entrada.nextInt();
 				
-				if(aux2 == 1) {
-					System.out.println("\nDIGITE A *CATEGORIA* DO FILME : \n");
-					entrada.nextLine();
-					f.setCategoria(entrada.nextLine());
-					System.out.println("DIGITE O *TITULO* DO FILME: \n");
-					f.setTitulo(entrada.nextLine());
-					System.out.println("DIGITE O *VALOR* DO FILME: \n");
-					f.setValor_aluguel(entrada.nextInt());
-					
-					fdao.inserirFilme(f);
-				}if(aux2 == 2) {
-					System.out.println("\nDE QUEM VOCÊ DESEJA ALTERAR? (DIGITE O ID) ");
-					aux = entrada.nextInt();
-					
-					for(int i=0; i < listaFilmes.size(); i++) {
-						if(aux == listaFilmes.get(i).getId_Filme()) {
-							System.out.println("\nO QUE VOCÊ DESEJA MUDAR? \n" +
-									"1- CATEGORIA\n" +
-									"2- TITULO\n" +
-									"3- VALOR DO ALUGUEL\n");
-							opc2 = entrada.nextInt();
-							listaFilmes.get(i).setId_Filme(aux);
+				DonoDAO ddao = new DonoDAO();
+				ArrayList<Dono> d = ddao.pegarDono();
+				String aux3 = "";
+								
+				System.out.println("DIGITE SEU ID \n");
+				aux2 = entrada.nextInt();
+				entrada.nextLine();
+				
+				System.out.println("DIGITE SUA SENHA \n");
+				aux3 = entrada.nextLine();
+				
+				for(int i = 0; i < d.size(); i++) {
+					if(d.get(i).getId_Dono() == aux2) {
+						if(aux3.equals(d.get(i).getSenha())) {
+							System.out.println("\nBEM VINDO " + d.get(i).getNome());
 							
-							if(opc2 == 1) {
-								System.out.println("DIGITE A CATEGORIA:\n");
-								entrada.nextLine();
-								listaFilmes.get(i).setCategoria(entrada.nextLine());
-							}if(opc2 == 2) {
-								System.out.println("DIGITE O TITULO: \n");
-								entrada.nextLine();
-								listaFilmes.get(i).setTitulo(entrada.nextLine());
-							}if(opc2 == 3) {
-								System.out.println("DIGITE O VALOR DO ALUGUEL: \n");
-								listaFilmes.get(i).setValor_aluguel(entrada.nextInt());
+							listaFilmes = fdao.mostrarFilmes();
+							for(i=0; i < listaFilmes.size(); i++) {
+								System.out.println(""+ listaFilmes.get(i).getId_Filme() +  "	|	" + listaFilmes.get(i).getCategoria() + "	|	" + listaFilmes.get(i).getTitulo() + "	|	R$ " + listaFilmes.get(i).getValor_aluguel());		
 							}
-							fdao.alterarFilme(listaFilmes.get(i));
+
+							System.out.println("\nO QUE VOCÊ DESEJA FAZER? \n" +
+									"1- ADICIONAR UM FILME\n" +
+									"2- ALTERAR UM FILME\n" +
+									"3- DELETAR UM FILME\n" +
+									"4- VÊ CADASTROS\n");
+							aux2 = entrada.nextInt();
+							
+							if(aux2 == 1) {
+								System.out.println("\nDIGITE A *CATEGORIA* DO FILME : \n");
+								entrada.nextLine();
+								f.setCategoria(entrada.nextLine());
+								System.out.println("DIGITE O *TITULO* DO FILME: \n");
+								f.setTitulo(entrada.nextLine());
+								System.out.println("DIGITE O *VALOR* DO FILME: \n");
+								f.setValor_aluguel(entrada.nextInt());
+								
+								fdao.inserirFilme(f);
+							}if(aux2 == 2) {
+								System.out.println("\nDE QUEM VOCÊ DESEJA ALTERAR? (DIGITE O ID) ");
+								aux = entrada.nextInt();
+								
+								for(i=0; i < listaFilmes.size(); i++) {
+									if(aux == listaFilmes.get(i).getId_Filme()) {
+										System.out.println("\nO QUE VOCÊ DESEJA MUDAR? \n" +
+												"1- CATEGORIA\n" +
+												"2- TITULO\n" +
+												"3- VALOR DO ALUGUEL\n");
+										opc2 = entrada.nextInt();
+										listaFilmes.get(i).setId_Filme(aux);
+										
+										if(opc2 == 1) {
+											System.out.println("DIGITE A CATEGORIA:\n");
+											entrada.nextLine();
+											listaFilmes.get(i).setCategoria(entrada.nextLine());
+										}if(opc2 == 2) {
+											System.out.println("DIGITE O TITULO: \n");
+											entrada.nextLine();
+											listaFilmes.get(i).setTitulo(entrada.nextLine());
+										}if(opc2 == 3) {
+											System.out.println("DIGITE O VALOR DO ALUGUEL: \n");
+											listaFilmes.get(i).setValor_aluguel(entrada.nextInt());
+										}
+										fdao.alterarFilme(listaFilmes.get(i));
+									}
+								}
+							}if(aux2 == 3) {
+								System.out.println("DIGITE O *ID* DE QUEM VOCÊ DESEJA DELETAR: ");
+								opc2 = entrada.nextInt();
+								
+								fdao.deletarFilme(opc2);
+							}if(aux2 == 4) {
+								listaCliente = cdao.mostrarClientes();
+								for(i=0; i < listaCliente.size(); i++) {
+									System.out.println(""+listaCliente.get(i).getId() + "	|	" + listaCliente.get(i).getName() + "	|	"+listaCliente.get(i).getIdade() + "	|	" +
+											listaCliente.get(i).getTelefone() + "	|	"+listaCliente.get(i).getEndereco());		
+								}
+							}
+						}else {
+							System.out.println("--- SENHA ERRADA ---");
 						}
-					}
-				}if(aux2 == 3) {
-					System.out.println("DIGITE O *ID* DE QUEM VOCÊ DESEJA DELETAR: ");
-					opc2 = entrada.nextInt();
-					
-					fdao.deletarFilme(opc2);
-				}if(aux2 == 4) {
-					for(int i=0; i < listaNova.size(); i++) {
-						System.out.println(""+listaNova.get(i).getId()+"\t"+listaNova.get(i).getName()+"\t"+listaNova.get(i).getIdade()+"\t"+
-								listaNova.get(i).getTelefone()+"\t"+listaNova.get(i).getEndereco());		
+					}else {
+						System.out.println("--- ID ERRADO ---");
 					}
 				}
 				break;

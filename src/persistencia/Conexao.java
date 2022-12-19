@@ -16,7 +16,6 @@ public class Conexao {
 
 	public void conectar() {
 		try {
-			
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(path, user, passoword);
 			

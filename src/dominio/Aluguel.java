@@ -1,24 +1,29 @@
 package dominio;
 
+import java.util.ArrayList;
+
+import persistencia.AluguelDAO;
 
 public class Aluguel {
 	
 	private String Data_aluguel;
 	private String Data_entrega; 
 	private int valor_aluguel;
+	private ArrayList<Filme> listasFilmes = new ArrayList<Filme>();
+	private ArrayList<Cliente> listasClientes = new ArrayList<Cliente>();
 	private int fk_filme;
 	private int fk_cliente;
-	//quando um cliente alugar um filme, este filme terá prazo e valor (dependendo se for lançamento ou não)
 	
 	public Aluguel() {
 		
 	}
 	
-	public Aluguel(String Data_aluguel, String Data_entrega, int valor_aluguel, int fk_filme) {
+	public Aluguel(String Data_aluguel, String Data_entrega, int valor_aluguel, int fk_filme, int fk_cliente) {
 		this.Data_aluguel = Data_aluguel;
 		this.Data_entrega = Data_entrega;
 		this.valor_aluguel = valor_aluguel;
 		this.fk_filme = fk_filme;
+		this.fk_cliente = fk_cliente;
 	}
 
 	public String getData_aluguel() {
@@ -43,6 +48,30 @@ public class Aluguel {
 
 	public void setValor_aluguel(int valor_aluguel) {
 		this.valor_aluguel = valor_aluguel;
+	}
+
+	public ArrayList<Filme> getListasFilmes() {
+		return listasFilmes;
+	}
+
+	public void setListasFilmes(ArrayList<Filme> listasFilmes) {
+		this.listasFilmes = listasFilmes;
+	}
+
+	public ArrayList<Filme> relatorioFilme(int id){
+		ArrayList<Filme> filmes = new ArrayList<>();
+		AluguelDAO aldao = new AluguelDAO();
+		
+		filmes = aldao.mostrarFilmes(id);		
+		return filmes;
+	}
+	
+	public ArrayList<Cliente> getListasClientes() {
+		return listasClientes;
+	}
+
+	public void setListasClientes(ArrayList<Cliente> listasClientes) {
+		this.listasClientes = listasClientes;
 	}
 
 	public int getFk_filme() {

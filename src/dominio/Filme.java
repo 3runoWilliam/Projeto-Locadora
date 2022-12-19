@@ -11,6 +11,11 @@ public class Filme {
 		
 	}
 	
+	public Filme(String categoria, String titulo, int valor_aluguel) {
+		this.categoria = categoria;
+		this.titulo = titulo;
+		this.valor_aluguel = valor_aluguel;
+	}
 	public Filme(int id_Filme, String categoria, String titulo, int valor_aluguel) {
 		this.id_Filme = id_Filme;
 		this.categoria = categoria;
