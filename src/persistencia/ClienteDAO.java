@@ -34,7 +34,7 @@ public class ClienteDAO {
 			}
 			c.desconectar();
 		}catch(Exception e){
-			System.out.println("--- ERRO NO RELATORIO ---" + e.getMessage());			
+			System.out.println("--- ERRO NO RELATORIO DO CLIENTE (MOSTRAR CLIENTES) ---" + e.getMessage());			
 		}
 		return lista;
 	}
