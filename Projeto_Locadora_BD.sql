@@ -24,5 +24,6 @@ título TEXT
 
 CREATE TABLE Dono(
 Id_Dono INT PRIMARY KEY, 
-senha TEXT PRIMARY KEY
+senha TEXT PRIMARY KEY,
+nome TEXT
 )
