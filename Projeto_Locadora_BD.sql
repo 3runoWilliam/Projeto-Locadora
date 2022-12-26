@@ -32,8 +32,7 @@ título TEXT
 
 CREATE TABLE Dono(
 Id_Dono INT PRIMARY KEY, 
-senha TEXT PRIMARY KEY, 
-FK_Cliente FOREIGN, 
+senha TEXT PRIMARY KEY
 )
 
 
